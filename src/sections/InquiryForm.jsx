@@ -97,7 +97,7 @@ const InquiryForm = () => {
     // 1. Prepare parameters for the ADMIN email
     // Multiple alias mappings are passed to ensure 100% template compatibility out-of-the-box!
     const adminTemplateParams = {
-      to_email: "drashtimanguwala@gmail.com",
+      to_email: "thekrishnaassociate82.com",
       subject: "New Loan Inquiry – Krishna Association",
       client_name: formData.name,
       from_name: formData.name,
@@ -207,7 +207,7 @@ Krishna Association`
                 <div className="info-icon"><Mail /></div>
                 <div>
                   <h4>Email Us</h4>
-                  <p>drashtimanguwala@gmail.com</p>
+                  <p>p.manguwala82@gmail.com</p>
                 </div>
               </div>
               <div className="info-item">
@@ -353,7 +353,7 @@ Krishna Association`
                   </div>
                   
                   <div className="form-group">
-                    <label>Message (Optional)</label>
+                    <label>Query Related loan ! </label>
                     <textarea 
                       name="message" 
                       value={formData.message}
