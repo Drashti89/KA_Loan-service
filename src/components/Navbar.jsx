@@ -23,42 +23,47 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
-      <div className="navbar-container">
-        <a href="#home" className="navbar-brand">
-          <img src="/logo_KA.jpeg" alt="Krishna Association Logo" className="navbar-logo-img" />
-          <div className="logo">
-            <span className="logo-text">KRISHNA</span>
-            <span className="logo-subtext">ASSOCIATION</span>
-          </div>
-        </a>
+    <>
+      <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
+        <div className="navbar-container">
+          <a href="#home" className="navbar-brand">
+            <img src="/logo_KA.jpeg" alt="Krishna Association Logo" className="navbar-logo-img" />
+            <div className="logo">
+              <span className="logo-text">KRISHNA</span>
+              <span className="logo-subtext">ASSOCIATION</span>
+            </div>
+          </a>
 
-        <ul className={`nav-links ${isMobileMenuOpen ? 'active' : ''}`}>
-          {navLinks.map((link) => (
-            <li key={link.name}>
-              <a href={link.href} onClick={() => setIsMobileMenuOpen(false)}>
-                {link.name}
+          <ul className={`nav-links ${isMobileMenuOpen ? 'active' : ''}`}>
+            {navLinks.map((link) => (
+              <li key={link.name}>
+                <a href={link.href} onClick={() => setIsMobileMenuOpen(false)}>
+                  {link.name}
+                </a>
+              </li>
+            ))}
+            <li className="mobile-only">
+              <a href="tel:9376666999" className="nav-cta-mobile">
+                <PhoneCall size={18} /> 9376666999
               </a>
             </li>
-          ))}
-          <li className="mobile-only">
-            <a href="tel:9376666999" className="nav-cta-mobile">
-              <PhoneCall size={18} /> 9376666999
-            </a>
-          </li>
-        </ul>
+          </ul>
 
-        <div className="nav-actions">
-          <a href="tel:9376666999" className="nav-cta">
-            <PhoneCall size={18} />
-            <span>9376666999</span>
-          </a>
-          <button className="menu-toggle" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-            {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-          </button>
+          <div className="nav-actions">
+            <a href="tel:9376666999" className="nav-cta">
+              <PhoneCall size={18} />
+              <span>9376666999</span>
+            </a>
+            <button className="menu-toggle" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+              {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+            </button>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+      {isMobileMenuOpen && (
+        <div className="nav-backdrop" onClick={() => setIsMobileMenuOpen(false)}></div>
+      )}
+    </>
   );
 };
 

@@ -44,7 +44,10 @@
 
 .footer-links h4, 
 .footer-contact h4 {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff; /* Force high-contrast bright white */
+  letter-spacing: 0.5px;
   margin-bottom: 30px;
   position: relative;
 }
