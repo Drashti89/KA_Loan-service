@@ -1,0 +1,147 @@
+.app {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Premium Light Fintech Loader Container */
+.loader-container {
+  position: fixed;
+  inset: 0;
+  background: #fafbfc; /* Crisp luxury off-white */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+/* Ambient Blurred Gradient Background Blooms */
+.loader-bg-bloom-1 {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  top: -150px;
+  left: -150px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, rgba(16, 185, 129, 0) 70%);
+  filter: blur(100px);
+  pointer-events: none;
+}
+
+.loader-bg-bloom-2 {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  bottom: -200px;
+  right: -200px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, rgba(14, 165, 233, 0) 70%);
+  filter: blur(120px);
+  pointer-events: none;
+}
+
+/* Loader Center Stack */
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  gap: 24px;
+}
+
+/* Premium Luxury Icon Box */
+.loader-icon-box {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(16, 185, 129, 0.05);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.08), inset 0 0 15px rgba(16, 185, 129, 0.02);
+  margin-bottom: 6px;
+}
+
+/* Rotating Gem / Diamond Accent */
+.loader-icon-gem {
+  width: 16px;
+  height: 16px;
+  background: linear-gradient(135deg, #10b981, #059669); /* Elegant emerald green scale */
+  transform: rotate(45deg);
+  border-radius: 3px;
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+  animation: pulseGem 2s infinite ease-in-out;
+}
+
+@keyframes pulseGem {
+  0% {
+    transform: rotate(45deg) scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: rotate(225deg) scale(1.15);
+    opacity: 1;
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.6);
+  }
+  100% {
+    transform: rotate(405deg) scale(0.95);
+    opacity: 0.8;
+  }
+}
+
+/* Spaced Clean Typography */
+.loader-text {
+  font-family: 'Outfit', sans-serif;
+  display: flex;
+  gap: 14px;
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: 7px;
+  text-transform: uppercase;
+  align-items: center;
+  margin: 0;
+  line-height: 1;
+}
+
+.brand-primary {
+  color: #0f172a; /* Premium Charcoal Slate */
+}
+
+.brand-secondary {
+  color: #10b981; /* Emerald/Teal Fintech Highlight */
+  font-weight: 300; /* Sophisticated light weight spacing */
+}
+
+/* Progress Bar Container */
+.loader-bar-container {
+  height: 3px;
+  background: rgba(15, 23, 42, 0.04);
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  margin-top: 4px;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.01);
+}
+
+/* Progress Active Line */
+.loader-bar-line {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #059669);
+  animation: loadingProgress 1.4s cubic-bezier(0.65, 0.05, 0.36, 1) infinite;
+}
+
+@keyframes loadingProgress {
+  0% {
+    left: -100%;
+  }
+  50% {
+    left: 0%;
+  }
+  100% {
+    left: 100%;
+  }
+}

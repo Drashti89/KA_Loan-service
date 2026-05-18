@@ -1,0 +1,90 @@
+.services-section {
+  background: var(--bg-light);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-desc {
+  color: var(--text-muted);
+  margin-top: 15px;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.service-card {
+  background: white;
+  padding: 40px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition-smooth);
+}
+
+.service-card:hover {
+  border-color: var(--primary-gold);
+  box-shadow: var(--shadow-lg);
+}
+
+.service-icon-box {
+  width: 60px;
+  height: 60px;
+  background: rgba(212, 175, 55, 0.1);
+  color: var(--primary-gold);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 25px;
+  transition: var(--transition-smooth);
+}
+
+.service-card:hover .service-icon-box {
+  background: var(--gradient-gold);
+  color: white;
+  transform: rotate(10deg);
+}
+
+.service-card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+}
+
+.service-card p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.card-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: var(--transition-smooth);
+  pointer-events: none;
+}
+
+.service-card:hover .card-glow {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+}
