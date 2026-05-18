@@ -92,3 +92,22 @@
     font-size: 1.1rem;
   }
 }
+
+@media (max-width: 480px) {
+  .quote-icon {
+    display: none; /* Hide background quotes to prevent layout overlaps */
+  }
+  
+  .testimonials-section {
+    padding: 60px 4% !important;
+  }
+  
+  .testimonial-carousel {
+    min-height: 280px;
+  }
+  
+  .control-btn {
+    width: 44px; /* Slightly smaller control tap indicators */
+    height: 44px;
+  }
+}

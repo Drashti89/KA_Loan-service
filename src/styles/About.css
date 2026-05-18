@@ -153,3 +153,33 @@
     font-size: 2.2rem;
   }
 }
+
+@media (max-width: 480px) {
+  .image-stack {
+    height: 300px;
+  }
+  
+  .image-main {
+    height: 240px;
+    width: 75%;
+  }
+  
+  .image-sub {
+    height: 180px;
+    width: 55%;
+    border-width: 4px;
+  }
+  
+  .experience-badge {
+    top: 20px;
+    padding: 12px;
+  }
+  
+  .experience-badge .years {
+    font-size: 1.5rem;
+  }
+  
+  .section-title {
+    font-size: 1.8rem;
+  }
+}
