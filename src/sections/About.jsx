@@ -1,4 +1,4 @@
-import React from 'react';
+// React import not required with automatic JSX runtime
 import { motion } from 'framer-motion';
 import { CheckCircle2 } from 'lucide-react';
 import '../styles/About.css';

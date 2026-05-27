@@ -1,29 +1,27 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Phone, Mail, MapPin, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 import '../styles/InquiryForm.css';
 
-// =========================================================================
-// EMAILJS CONFIGURATION
-// =========================================================================
-// You can EITHER paste your credentials directly here OR define them in a `.env` file:
-// VITE_EMAILJS_PUBLIC_KEY="your_public_key"
-// VITE_EMAILJS_SERVICE_ID="your_service_id"
-// VITE_EMAILJS_ADMIN_TEMPLATE_ID="your_admin_template_id"
-// VITE_EMAILJS_USER_TEMPLATE_ID="your_user_template_id"
-const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "6OQcB_kvFuV0Cllzz"; 
-const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_ioxz8ps";
-const EMAILJS_ADMIN_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_ADMIN_TEMPLATE_ID || "template_bsifhjx"; // Target: drashtimanguwala@gmail.com
-const EMAILJS_USER_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_USER_TEMPLATE_ID || "template_iyipkpq";     // Target: Auto-reply to user
+// Read EmailJS configuration from environment (Vite exposes variables under import.meta.env)
+const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+const EMAILJS_ADMIN_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_ADMIN_TEMPLATE_ID;
+const EMAILJS_USER_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_USER_TEMPLATE_ID;
+const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL;
 
 const InquiryForm = () => {
+  // Check env configuration availability
+  const emailjsConfigMissing = !EMAILJS_PUBLIC_KEY || !EMAILJS_SERVICE_ID || !EMAILJS_ADMIN_TEMPLATE_ID || !EMAILJS_USER_TEMPLATE_ID;
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
     email: '',
     loanType: '',
-    message: ''
+    message: '',
+    hp: '' // honeypot field to help detect bots
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -46,6 +44,10 @@ const InquiryForm = () => {
 
   const validate = () => {
     const errors = {};
+    // Honeypot spam check
+    if (formData.hp && formData.hp.trim() !== '') {
+      errors.hp = 'Spam detected';
+    }
     if (!formData.name.trim()) {
       errors.name = 'Full name is required';
     } else if (formData.name.trim().length < 2) {
@@ -78,6 +80,12 @@ const InquiryForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    if (emailjsConfigMissing) {
+      setErrorMessage('Email service not configured. Please set environment variables (see .env.example) and restart dev server.');
+      setSubmitStatus('error');
+      return;
+    }
+
     if (!validate()) {
       return;
     }
@@ -87,94 +95,87 @@ const InquiryForm = () => {
     setSubmitStatus('idle');
     setErrorMessage('');
 
-    // Ensure SDK is initialized with public key
-    try {
-      emailjs.init(EMAILJS_PUBLIC_KEY);
-    } catch (initErr) {
-      console.warn("EmailJS SDK initialization warning:", initErr);
-    }
-
-    // 1. Prepare parameters for the ADMIN email
-    // Multiple alias mappings are passed to ensure 100% template compatibility out-of-the-box!
+    // Prepare parameters for the ADMIN email
     const adminTemplateParams = {
-      to_email: "thekrishnaassociate82.com",
+      to_email: ADMIN_EMAIL || "krishna.associates1982@gmail.com",
+      email: formData.email,
+      reply_to: formData.email,
+      
       subject: "New Loan Inquiry – Krishna Association",
       client_name: formData.name,
       from_name: formData.name,
       name: formData.name,
+      user_name: formData.name,
+      userName: formData.name,
       
       client_phone: formData.phone,
       phone: formData.phone,
+      phone_number: formData.phone,
+      phoneNumber: formData.phone,
       
       client_email: formData.email,
-      email: formData.email,
-      reply_to: formData.email,
+      from_email: formData.email,
+      user_email: formData.email,
+      userEmail: formData.email,
       
       loan_type: formData.loanType,
-      message: formData.message || "No message provided"
+      loanType: formData.loanType,
+      loan_product: formData.loanType,
+      
+      message: formData.message || "No message provided",
+      user_message: formData.message || "No message provided",
+      userMessage: formData.message || "No message provided",
+      query: formData.message || "No message provided"
     };
 
-    // 2. Prepare parameters for the USER auto-reply email
+    // Prepare parameters for the USER auto-reply email
     const userTemplateParams = {
       to_email: formData.email,
       email: formData.email,
-      reply_to: "drashtimanguwala@gmail.com",
+      reply_to: ADMIN_EMAIL || "krishna.associates1982@gmail.com",
+      user_email: formData.email,
+      userEmail: formData.email,
+      client_email: formData.email,
       
       to_name: formData.name,
       client_name: formData.name,
       name: formData.name,
+      user_name: formData.name,
+      userName: formData.name,
       
       subject: "Thank You for Contacting Krishna Association",
-      reply_message: `Thank you for contacting Krishna Association.
-
-We have received your inquiry successfully. Our team will review your request and contact you within 24–48 hours.
-
-We appreciate your interest in our loan services.
-
-Regards,
-Krishna Association`,
-      message: `Thank you for contacting Krishna Association.
-
-We have received your inquiry successfully. Our team will review your request and contact you within 24–48 hours.
-
-We appreciate your interest in our loan services.
-
-Regards,
-Krishna Association`
+      reply_message: "Thank you for contacting Krishna Association. Our team will contact you within 24-48 hours.",
+      message: "Thank you for contacting Krishna Association. Our team will contact you within 24-48 hours."
     };
 
     try {
-      // Fail-fast if default placeholders are present to provide highly actionable diagnostic errors
-      if (EMAILJS_PUBLIC_KEY === "YOUR_PUBLIC_KEY" || EMAILJS_SERVICE_ID === "YOUR_SERVICE_ID") {
-        throw new Error("EmailJS keys are set to default placeholders. Please replace the placeholders with your actual keys inside 'src/sections/InquiryForm.jsx' or a local '.env' file.");
-      }
-
-      // 3. Dispatch both emails concurrently for ultra-fast, non-blocking UI transition
+      // Dispatch both emails concurrently for ultra-fast, non-blocking UI transition
       await Promise.all([
-        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_ADMIN_TEMPLATE_ID, adminTemplateParams),
-        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_USER_TEMPLATE_ID, userTemplateParams)
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_ADMIN_TEMPLATE_ID, adminTemplateParams, EMAILJS_PUBLIC_KEY),
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_USER_TEMPLATE_ID, userTemplateParams, EMAILJS_PUBLIC_KEY)
       ]);
 
-      // 4. Update UI to success state
+      // Update UI to success state
       setSubmitStatus('success');
 
-      // 5. Reset form inputs
+      // Reset form inputs
       setFormData({
         name: '',
         phone: '',
         email: '',
         loanType: '',
-        message: ''
+        message: '',
+        hp: ''
       });
     } catch (error) {
-      // Detailed error printing for developer diagnostics
-      console.error("=================== EMAILJS INTEGRATION ERROR ===================");
-      console.error("Failed to send inquiry emails.");
-      console.error("Status Code:", error.status || "N/A");
-      console.error("Error Message:", error.text || error.message || error);
-      console.error("=================================================================");
-      
-      setErrorMessage(error.text || error.message || String(error));
+      // Provide better error details for debugging
+      console.error("EmailJS sending failed:", error);
+      const status = error?.status || error?.statusCode || (error && error.status);
+      const text = error?.text || error?.response || error?.message;
+      const message = text || "Failed to send inquiry. Please try again.";
+      setErrorMessage(
+        status ? `Failed to send: [${status}] ${message}` : `Failed to send: ${message}`
+      );
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
@@ -207,7 +208,7 @@ Krishna Association`
                 <div className="info-icon"><Mail /></div>
                 <div>
                   <h4>Email Us</h4>
-                  <p>p.manguwala82@gmail.com</p>
+                  <p>krishna.associates1982@gmail.com</p>
                 </div>
               </div>
               <div className="info-item">
@@ -283,6 +284,23 @@ Krishna Association`
                       <span>{errorMessage}</span>
                     </div>
                   )}
+                  {validationErrors.hp && (
+                    <div className="error-banner">
+                      <AlertCircle size={20} style={{ flexShrink: 0 }} />
+                      <span>{validationErrors.hp}</span>
+                    </div>
+                  )}
+
+                  {/* Honeypot field (hidden) to catch bots */}
+                  <input
+                    type="text"
+                    name="hp"
+                    value={formData.hp}
+                    onChange={handleChange}
+                    autoComplete="off"
+                    tabIndex={-1}
+                    style={{ display: 'none' }}
+                  />
                   
                   <div className={`form-group ${validationErrors.name ? 'has-error' : ''}`}>
                     <label>Full Name</label>

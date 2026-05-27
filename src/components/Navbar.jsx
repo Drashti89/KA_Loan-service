@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Menu, X, PhoneCall } from 'lucide-react';
 import '../styles/Navbar.css';
 
@@ -34,7 +34,7 @@ const Navbar = () => {
             </div>
           </a>
 
-          <ul className={`nav-links ${isMobileMenuOpen ? 'active' : ''}`}>
+          <ul id="primary-navigation" className={`nav-links ${isMobileMenuOpen ? 'active' : ''}`}>
             {navLinks.map((link) => (
               <li key={link.name}>
                 <a href={link.href} onClick={() => setIsMobileMenuOpen(false)}>
@@ -54,7 +54,13 @@ const Navbar = () => {
               <PhoneCall size={18} />
               <span>9376666999</span>
             </a>
-            <button className="menu-toggle" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            <button
+              className="menu-toggle"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="primary-navigation"
+            >
               {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
           </div>
